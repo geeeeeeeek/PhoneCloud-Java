@@ -1,0 +1,5 @@
+基于HBase的手机信息备份系统
+
+服务器端：server
+
+客户端：client        
