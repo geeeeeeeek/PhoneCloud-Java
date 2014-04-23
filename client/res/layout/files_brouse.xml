@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+	android:orientation="vertical" 
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	<RelativeLayout  
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_margin="5dip"
+	    > 
+	    <Button
+		    android:id="@+id/backbutton4" 
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content" 
+		    android:text="返回"
+		    />
+	    <Button
+		    android:id="@+id/uploadbutton"  
+		    android:layout_alignParentRight="true"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content" 
+		    android:text="确定"
+		    />
+	</RelativeLayout>
+  
+	<ListView 
+	    android:layout_width="fill_parent"
+		android:layout_height="fill_parent" 
+		android:id="@+id/itemlist" />
+</LinearLayout>
