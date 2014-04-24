@@ -1,0 +1,136 @@
+package org.store;
+
+import java.util.ArrayList;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.bean.MyFileInfo;
+
+/**
+ * 文件操作类，包括添加文件、获取文件等
+ * @author xqs
+ *
+ */
+public class MyFile {
+	private HBaseUtil hu;
+	public MyFile(){ 
+		 hu=new HBaseUtil(); 
+	}
+	
+	//------------------hdfs------------------ 
+	public boolean addBigFile(String fileId,String filePath){
+		Hdfs hdfs=new Hdfs();
+		boolean bool=hdfs.addBigFile(fileId, filePath);
+		return bool;
+	}
+	
+	public boolean getSmallFile(String clientId,String fileId,String fileName){
+		Hdfs hdfs=new Hdfs();
+		String mapFilePath=hu.getValue(clientId+fileId,Constants.Family,Constants.MapFilePath);
+		return hdfs.getSmallFile(Constants.MapFileDir+mapFilePath,clientId,fileId, fileName);
+	}
+	
+	public boolean getFile(String clientId,String fileId,String fileName){
+		Hdfs hdfs=new Hdfs();
+		String val=hu.getValue(clientId+fileId,Constants.Family,"fileisSmall");
+		if(val.contains("yes")){
+			if(getSmallFile(clientId,fileId,fileName)){
+				return true;
+			}
+		}else {
+			if(hdfs.getBigFile(fileId, fileName)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	//-------------------Hbase--------------------
+	public void storeToHbase(String userName,MyFileInfo fi){
+		
+		hu.creatTable(Constants.TableName,Constants.Familys);
+		String id=getPublicId();
+		try{
+			hu.addRecord(userName+id,Constants.Family,Constants.ColumnPrefix3+"fileId",id); 
+			hu.addRecord(userName+id,Constants.Family,Constants.ColumnPrefix3+"fileName", fi.getFileName());
+			hu.addRecord(userName+id,Constants.Family,Constants.ColumnPrefix3+"fileSize", fi.getFileSize());
+			hu.addRecord(userName+id,Constants.Family,Constants.ColumnPrefix3+"isSmall", fi.getIsSmall());
+			hu.addRecord(userName+id,Constants.Family,Constants.ColumnPrefix3+"uploaded", fi.getUploaded());
+			hu.addRecord(Constants.PublicKey,Constants.Family,Constants.PublicId,id);
+			if(fi.getIsSmall().equals("yes")){
+				String rowKeys=hu.getValue(Constants.PublicSmallFile, Constants.Family, Constants.PublicRowKeys);
+				if(rowKeys==null||rowKeys.equals("")){
+					rowKeys=userName+id;
+				}else{
+					rowKeys=rowKeys+"#"+userName+id;
+				}
+				hu.addRecord(Constants.PublicSmallFile,Constants.Family,Constants.PublicRowKeys,rowKeys);
+				String size=hu.getValue(Constants.PublicSmallFileSize,Constants.Family,Constants.SmallFileSize);
+				if(size==null){
+					size=fi.getFileSize();
+				}else{
+					size=String.valueOf(Integer.parseInt(size)+Integer.parseInt(fi.getFileSize()));
+				}
+				hu.addRecord(Constants.PublicSmallFileSize,Constants.Family,Constants.SmallFileSize,size);
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	public String getPublicId(){ 
+		hu.creatTable(Constants.TableName,Constants.Familys);
+		String id=hu.getValue(Constants.PublicKey,Constants.Family,Constants.PublicId);
+		if(id==null){
+			id="0";
+		}
+		id=Utils.zhuanhuan(Integer.parseInt(id)+1);
+		return id;
+	}
+	//------------------local file----------------
+	public void checkUploadPath(String localPath) {
+		Hdfs hdfs=new Hdfs(); 
+		hu.creatTable(Constants.TableName,Constants.Familys);
+		String size=hu.getValue(Constants.PublicSmallFileSize,Constants.Family,Constants.SmallFileSize);
+		if(size!=null){
+			int s=Integer.parseInt(size);
+			if(s>Constants.UploadSize){
+				String val=hu.getValue(Constants.PublicSmallFile,Constants.Family,Constants.PublicRowKeys);
+				//clear publicSmallFile and size
+				hu.addRecord(Constants.PublicSmallFile, Constants.Family,Constants.PublicRowKeys,"");
+				hu.addRecord(Constants.PublicSmallFileSize,Constants.Family,Constants.SmallFileSize,"0");
+				String files[]=val.split("#");
+				ArrayList<MyFileInfo> list=new ArrayList<MyFileInfo>();
+				MyFileInfo fs;
+				for(int i=0;i<files.length;i++){ 
+					fs=new MyFileInfo();
+					fs.setFileId(files[i].substring(files[i].length()-10,files[i].length())); 
+					fs.setLocalPath(localPath);
+					list.add(fs); 
+				}
+				String mapFilePathId=hu.getValue(Constants.PublicMapFilePath,Constants.Family,Constants.PublicMapFilePathNumber);
+				if(mapFilePathId==null||mapFilePathId.equals("")){
+					mapFilePathId=Utils.zhuanhuan(0);
+					hu.addRecord(Constants.PublicMapFilePath,Constants.Family,Constants.PublicMapFilePathNumber,mapFilePathId);
+				}else{
+					mapFilePathId=Utils.zhuanhuan(Integer.parseInt(mapFilePathId)+1);
+					hu.addRecord(Constants.PublicMapFilePath,Constants.Family,Constants.PublicMapFilePathNumber,mapFilePathId);
+				}
+				String mapFilePath="/mapFile/"+mapFilePathId;
+				for(int i=0;i<files.length;i++){ 
+					hu.addRecord(files[i], Constants.Family,"fileuploaded","yes");
+					hu.addRecord(files[i],Constants.Family,Constants.MapFilePath,mapFilePathId);
+				} 
+				hdfs.addSmallFile(mapFilePath,localPath, list);
+			}
+		}
+		
+	}
+
+	public String getFileJsonData(String userName) {
+		HBaseUtil hu=new HBaseUtil();
+		return hu.getRecords(userName, Constants.ColumnPrefix3); 
+	}
+
+}

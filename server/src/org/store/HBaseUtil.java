@@ -1,0 +1,180 @@
+package org.store;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List; 
+import net.sf.ezmorph.*;
+import net.sf.json.util.JSONStringer; 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseConfiguration; 
+import org.apache.hadoop.hbase.HColumnDescriptor;
+import org.apache.hadoop.hbase.HTableDescriptor;
+import org.apache.hadoop.hbase.KeyValue; 
+import org.apache.hadoop.hbase.client.Delete;
+import org.apache.hadoop.hbase.client.Get;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
+import org.apache.hadoop.hbase.client.HTable;
+import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.client.ResultScanner;
+import org.apache.hadoop.hbase.client.Scan; 
+import org.apache.hadoop.hbase.filter.ColumnPrefixFilter;
+import org.apache.hadoop.hbase.util.Bytes;
+import org.bean.ContactInfo;
+import org.bean.SmsInfo;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+/**
+ * HBase工具类，包括创建表、插入记录等待。
+ * @author xqs 
+ *
+ */
+public class HBaseUtil {
+	private Configuration conf = null;
+	public HBaseUtil(){
+		conf = HBaseConfiguration.create();
+		conf.set("hbase.master", Constants.HostName+":60000");
+		conf.set("hbase.zookeeper.quorum", Constants.HostName);
+		conf.set("hbase.zookeeper.property.clientPort", "2181");
+		 
+	} 
+	
+	public void creatTable(String tableName , String[] familys)  {
+		try{
+			HBaseAdmin admin = new HBaseAdmin(conf);
+			if (admin.tableExists(tableName)) {
+				System.out.println("table already exists!");
+			} else {
+				HTableDescriptor tableDesc = new HTableDescriptor(tableName); 
+				for (int i = 0; i < familys.length; i++) {
+					tableDesc.addFamily(new HColumnDescriptor(familys[i]));
+				}
+				admin.createTable(tableDesc);
+				System.out.println("create table " + tableName + " ok.");
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	public void addRecord(String rowKey, String family,
+			String qualifier, String value)  {
+		try {
+
+			HTable table= new HTable(conf, Constants.TableName);;
+			Put put = new Put(Bytes.toBytes(rowKey));
+			put.add(Bytes.toBytes(family), Bytes.toBytes(qualifier),
+					Bytes.toBytes(value));
+			table.put(put); 
+			System.out.println("insert recored " + rowKey + "  "+family +" "+qualifier+" "+value+ " ok.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void delRecord(String rowKey, String family,String qualifier) {  
+		Delete del = new Delete(rowKey.getBytes());
+        try{ 
+        	HTable table= new HTable(conf, Constants.TableName);
+        	del.deleteColumn(family.getBytes(), qualifier.getBytes());
+    		table.delete(del);
+        }catch(Exception e){
+        	e.printStackTrace();
+        }
+		System.out.println("del record " + rowKey + " ok.");
+	}
+	
+	public String getValue(String rowKey,String family,String qualifier){
+		try{
+			HTable table = new HTable(conf, Constants.TableName);
+		
+			Get get=new Get(Bytes.toBytes(rowKey));  
+			get.addColumn(family.getBytes(), qualifier.getBytes());
+			Result result=table.get(get);
+			String val=null; 
+			
+			for(KeyValue kv:result.raw()){
+				 val=new String(kv.getValue(),"UTF-8");
+			}
+			return val;
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+ 
+	
+	public String getRecords(String userName,String columnPrefix){
+		try {
+			HTable table = new HTable(conf, Constants.TableName);
+			Scan s = new Scan();
+			s.setStartRow((userName+"0000000000").getBytes());
+			s.setStopRow((userName+"1000000000").getBytes()); 
+			ColumnPrefixFilter cpf=new ColumnPrefixFilter(columnPrefix.getBytes());
+            s.setFilter(cpf);
+			ResultScanner ss = table.getScanner(s);
+			JSONStringer js=new JSONStringer();
+			js.array();
+			for (Result r : ss) {
+				js.object();
+				for (KeyValue kv : r.raw()) {
+					String key=new String(kv.getQualifier());
+					String val=new String(kv.getValue(),"UTF-8");
+					key=key.substring(columnPrefix.length(),key.length());
+					js.key(key).value(val);
+				}
+				js.endObject();
+			}
+			js.endArray();
+			return js.toString();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return "";
+		}
+
+	} 
+	
+	public  List<SmsInfo> parseSmsJsonData(String jsonData) {
+
+		List<SmsInfo> data = new ArrayList<SmsInfo>();
+		Type type = new TypeToken<LinkedList<SmsInfo>>() {
+		}.getType();
+		Gson gson = new Gson(); 
+		if (jsonData != null) {
+			LinkedList<SmsInfo> smsInfos = gson.fromJson(jsonData, type); 
+
+			for (Iterator<SmsInfo> iterator = smsInfos.iterator(); iterator.hasNext();) {
+				SmsInfo smsInfo = (SmsInfo) iterator.next();
+				data.add(smsInfo);
+			}
+		}
+		return data;
+
+	}
+	
+	public  List<ContactInfo> parseContactJsonData(String jsonData) {
+
+		List<ContactInfo> data = new ArrayList<ContactInfo>();
+		Type type = new TypeToken<LinkedList<ContactInfo>>() {
+		}.getType();
+		Gson gson = new Gson(); 
+		if (jsonData != null) {
+			LinkedList<ContactInfo> contactInfos = gson.fromJson(jsonData, type); 
+
+			for (Iterator<ContactInfo> iterator = contactInfos.iterator(); iterator.hasNext();) {
+				ContactInfo contactInfo = (ContactInfo) iterator.next();
+				data.add(contactInfo);
+			}
+		}
+		return data;
+
+	}
+
+	
+	
+}
