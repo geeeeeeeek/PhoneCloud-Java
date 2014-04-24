@@ -20,11 +20,13 @@ Server端介绍：
 5. 下载文件Action----------->DownloadFileAction.java 
 
 封装了3个实体： 
+
 1. 短信------->SmsInfo.java 
 2. 联系人----->ContactInfo.java 
 3. 文件------->MyFileInfo.java 
  
 底部存储层： 
+
 1. Hdfs操作类-------->Hdfs.java 
 2. HBase操作类------->HBaseUtil.java 
 3. 短信操作类-------->Sms.java 
