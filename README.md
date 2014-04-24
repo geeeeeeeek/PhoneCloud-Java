@@ -12,24 +12,25 @@ Client运行环境: Eclipse+Android2.3
 Server端介绍：
 
 接收客户端请求的Action：
-1. 添加短信Action----------->AddInfoAction.java
-2. 获取短信Action----------->GetInfoAction.java
-3. 同步联系人Action--------->AddContactAction.java
-4. 上传文件Action----------->UploadFileAction.java
-5. 下载文件Action----------->DownloadFileAction.java
 
-封装了3个实体：
-1. 短信------->SmsInfo.java
-2. 联系人----->ContactInfo.java
-3. 文件------->MyFileInfo.java
+1. 添加短信Action----------->AddInfoAction.java 
+2. 获取短信Action----------->GetInfoAction.java 
+3. 同步联系人Action--------->AddContactAction.java 
+4. 上传文件Action----------->UploadFileAction.java 
+5. 下载文件Action----------->DownloadFileAction.java 
 
-底部存储层：
-1. Hdfs操作类-------->Hdfs.java
-2. HBase操作类------->HBaseUtil.java
-3. 短信操作类-------->Sms.java
-4. 联系人操作类------>Contact.java
-5. 文件操作类-------->MyFile.java
-
+封装了3个实体： 
+1. 短信------->SmsInfo.java 
+2. 联系人----->ContactInfo.java 
+3. 文件------->MyFileInfo.java 
+ 
+底部存储层： 
+1. Hdfs操作类-------->Hdfs.java 
+2. HBase操作类------->HBaseUtil.java 
+3. 短信操作类-------->Sms.java 
+4. 联系人操作类------>Contact.java 
+5. 文件操作类-------->MyFile.java 
+ 
 上面的Action都配置到Struts.xml中。
 
 
