@@ -10,6 +10,10 @@ import org.store.MyFile;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class DownloadFileAction extends ActionSupport { 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	HttpServletRequest request=ServletActionContext.getRequest();
     HttpServletResponse response=(HttpServletResponse) ServletActionContext.getContext().get(ServletActionContext.HTTP_RESPONSE);
     String path=ServletActionContext.getServletContext().getRealPath("/")+"downloadfile\\"+request.getParameter("fileid");

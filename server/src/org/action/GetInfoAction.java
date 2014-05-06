@@ -15,12 +15,14 @@ import com.opensymphony.xwork2.ActionSupport;
 
 public class GetInfoAction extends ActionSupport implements
 ServletRequestAware, ServletResponseAware, ServletContextAware{
-	private  ServletContext context; 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	public void setServletContext(ServletContext arg0) {
 		// TODO Auto-generated method stub
-		this.context=arg0;
 	}
 
 	public void setServletResponse(HttpServletResponse arg0) {

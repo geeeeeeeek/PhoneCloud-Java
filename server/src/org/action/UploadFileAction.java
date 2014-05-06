@@ -17,6 +17,10 @@ import org.store.MyFile;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class UploadFileAction extends ActionSupport {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	// 上传文件域
     private File file;
     // 上传文件类型 

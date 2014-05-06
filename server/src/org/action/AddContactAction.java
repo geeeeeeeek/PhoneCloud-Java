@@ -10,18 +10,18 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 import org.apache.struts2.util.ServletContextAware;
 import org.store.Contact;
-import org.store.HBaseUtil;
-import org.store.Sms;
 
 import com.opensymphony.xwork2.ActionSupport;
 
 public class AddContactAction  extends ActionSupport implements
 ServletRequestAware, ServletResponseAware, ServletContextAware{
-	private  ServletContext context;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private HttpServletRequest request;
 	private HttpServletResponse response; 
 	public void setServletContext(ServletContext arg0) {
-		this.context=arg0;
 	}
 
 	public void setServletResponse(HttpServletResponse arg0) {

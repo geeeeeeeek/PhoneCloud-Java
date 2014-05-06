@@ -15,14 +15,18 @@ import com.opensymphony.xwork2.ActionSupport;
 
 public class AddInfoAction extends ActionSupport implements
 		ServletRequestAware, ServletResponseAware, ServletContextAware {
-    private  ServletContext context;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private HttpServletRequest request;
 	private HttpServletResponse response; 
 
-	public void setServletContext(ServletContext arg0) {
-		this.context=arg0;
-	}
 
+	public void setServletContext(ServletContext arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 	public void setServletResponse(HttpServletResponse arg0) {
 		this.response = arg0;
 
@@ -44,4 +48,5 @@ public class AddInfoAction extends ActionSupport implements
 		pw.write("ok"); 
 		return null;
 	}
+
 }
