@@ -16,7 +16,7 @@
           android:id="@+id/beifen"
           android:layout_width="fill_parent"
           android:layout_height="wrap_content"
-          android:text="备份短信"/>
+          android:text="备份短信"/>  
       <Button 
           android:id="@+id/huanyuan"
           android:layout_width="fill_parent"
