@@ -21,7 +21,7 @@ public class Sms {
 				if(remote.connect()){
 					String result=remote.sendJsonData(Constants.Type1, Constants.UserName, smsJsonData);
 					if(result.equals("ok")){
-						System.out.println("beifen success");
+						System.out.println("beifen success!");
 					}
 				}
 			}
