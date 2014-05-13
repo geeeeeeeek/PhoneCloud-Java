@@ -35,4 +35,5 @@ Server端介绍：
  
 上面的Action都配置到Struts.xml中。
 
+如有疑问请联系：912750350@qq.com
 
