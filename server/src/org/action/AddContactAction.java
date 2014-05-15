@@ -1,16 +1,13 @@
 package org.action;
 
-import java.io.PrintWriter;
-
+import java.io.PrintWriter; 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import javax.servlet.http.HttpServletResponse; 
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
 import org.apache.struts2.util.ServletContextAware;
-import org.store.Contact;
-
+import org.store.Contact; 
 import com.opensymphony.xwork2.ActionSupport;
 
 public class AddContactAction  extends ActionSupport implements
@@ -32,6 +29,7 @@ ServletRequestAware, ServletResponseAware, ServletContextAware{
 	public void setServletRequest(HttpServletRequest arg0) {
 		this.request = arg0;   
 	}
+
 	@Override
 	public String execute() throws Exception {
 		request.setCharacterEncoding("utf-8"); 
