@@ -39,11 +39,13 @@ Server端介绍：
 Client端介绍：
 
 封装了三个实体bean
+
 1. ContactInfo
 2. SmsInfo
 3. FileInfo
 
 操作类
+
 1. Contact
 2. Sms  
 
