@@ -114,7 +114,7 @@ public class Remote {
 
 			HttpResponse response = httpclient.execute(httppost);
 			Header[] headers = response.getAllHeaders();
-			long size = 0;// 文件大小 
+			long size = 0;// 文件大小  
 			for (Header h : headers) {
 				 if ("Content-Length".equals(h.getName())) {
 					size = Long.valueOf(h.getValue());
