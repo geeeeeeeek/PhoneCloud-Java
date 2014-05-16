@@ -35,5 +35,17 @@ Server端介绍：
  
 上面的Action都配置到Struts.xml中。
 
+
+Client端介绍：
+
+封装了三个实体bean
+1. ContactInfo
+2. SmsInfo
+3. FileInfo
+
+操作类
+1. Contact
+2. Sms  
+
 如有疑问请联系：912750350@qq.com
 
