@@ -1,7 +1,7 @@
 package com.xiao.bean;
 
 public class FileInfo {
-
+    
 	private String fileId;
 	private String fileName;
 	private String flag;
