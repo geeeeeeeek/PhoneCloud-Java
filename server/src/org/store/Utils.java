@@ -1,4 +1,4 @@
-package org.store;
+﻿package org.store;
  
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -7,7 +7,7 @@ import java.io.IOException;
 import javax.imageio.stream.FileImageInputStream;
 import javax.imageio.stream.FileImageOutputStream;
 /**
- * 工具类
+ * 工具类  
  * @author xqs
  * 
  */
