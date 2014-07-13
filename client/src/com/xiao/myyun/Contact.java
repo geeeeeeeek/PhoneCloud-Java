@@ -13,7 +13,7 @@ public class Contact {
 	public void tongbu(){
 		Thread th=new Thread(){
 			public void run(){
-				 try {
+				 try { 
 					 String contactJsonData=ContactUtil.getContactJsonData(ct);
 						
 						Remote remote=new Remote();
