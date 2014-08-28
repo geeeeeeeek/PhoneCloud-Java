@@ -1,4 +1,4 @@
-package com.xiao.myyun;
+﻿package com.xiao.myyun;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log; 
-
+  
 public class LocalDB {
 	public static final String KEY_TABLE1 = "uploadlist";//上传表
 	public static final String KEY_TABLE2="downloadlist";//下载表
