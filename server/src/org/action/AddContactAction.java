@@ -36,7 +36,7 @@ ServletRequestAware, ServletResponseAware, ServletContextAware{
 		String userName = request.getParameter("username");
 		String jsonData = request.getParameter("jsondata");
 		if(userName==null||jsonData==null){
-			return null;
+			return null; 
 		}
 		Contact contact=new Contact();
 		contact.storeToHbase(userName, jsonData);
