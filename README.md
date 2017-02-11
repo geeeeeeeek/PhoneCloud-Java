@@ -7,7 +7,7 @@ PhoneCloud-Java
 
 Server运行环境：Hadoop+HBase+Tomcat
 
-Client运行环境: Eclipse+Android2.3
+Client运行环境: Eclipse+Android
 
 Server端介绍：
 
