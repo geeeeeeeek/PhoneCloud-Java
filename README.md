@@ -49,5 +49,4 @@ Client端介绍：
 1. Contact
 2. Sms  
 
-如有疑问请联系：lovezww2011@gmail.com
-
+如有疑问请联系：lovezww2011@gmail.com 或微信我
